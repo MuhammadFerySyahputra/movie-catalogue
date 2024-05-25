@@ -25,7 +25,6 @@ const FooterToolsInitiator = {
     });
   },
 
-  // eslint-disable-next-line no-empty-function
   async _initialState() {
     this._showSubscribeButton();
   },
@@ -39,7 +38,7 @@ const FooterToolsInitiator = {
     }
 
     if (!(await this._isNotificationReady())) {
-      console.log("Notification isn't available");
+      console.log('Notification isn\'t available');
       return;
     }
 
@@ -54,16 +53,10 @@ const FooterToolsInitiator = {
     }
 
     try {
-      await this._sendPostToServer(
-        CONFIG.PUSH_MSG_SUBSCRIBE_URL,
-        pushSubscription,
-      );
+      await this._sendPostToServer(CONFIG.PUSH_MSG_SUBSCRIBE_URL, pushSubscription);
       console.log('Push message has been subscribed');
     } catch (err) {
-      console.error(
-        'Failed to store push notification data to server:',
-        err.message,
-      );
+      console.error('Failed to store push notification data to server:', err.message);
 
       // Undo subscribing push notification
       await pushSubscription?.unsubscribe();
@@ -77,33 +70,24 @@ const FooterToolsInitiator = {
 
     const pushSubscription = await this._registrationServiceWorker?.pushManager.getSubscription();
     if (!pushSubscription) {
-      window.alert("Haven't subscribing to push message");
+      window.alert('Haven\'t subscribing to push message');
       return;
     }
 
     try {
-      await this._sendPostToServer(
-        CONFIG.PUSH_MSG_UNSUBSCRIBE_URL,
-        pushSubscription,
-      );
+      await this._sendPostToServer(CONFIG.PUSH_MSG_UNSUBSCRIBE_URL, pushSubscription);
 
       const isHasBeenUnsubscribed = await pushSubscription.unsubscribe();
       console.log('isHasBeenUnsubscribed: ', isHasBeenUnsubscribed);
       if (!isHasBeenUnsubscribed) {
         console.log('Failed to unsubscribe push message');
-        await this._sendPostToServer(
-          CONFIG.PUSH_MSG_SUBSCRIBE_URL,
-          pushSubscription,
-        );
+        await this._sendPostToServer(CONFIG.PUSH_MSG_SUBSCRIBE_URL, pushSubscription);
         return;
       }
 
       console.log('Push message has been unsubscribed');
     } catch (err) {
-      console.error(
-        'Failed to erase push notification data from server:',
-        err.message,
-      );
+      console.error('Failed to erase push notification data from server:', err.message);
     }
 
     this._showSubscribeButton();
@@ -111,7 +95,7 @@ const FooterToolsInitiator = {
 
   _urlB64ToUint8Array: (base64String) => {
     // eslint-disable-next-line no-mixed-operators
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
       .replace(/-/g, '+')
       .replace(/_/g, '/');
@@ -128,9 +112,7 @@ const FooterToolsInitiator = {
   _generateSubscribeOptions() {
     return {
       userVisibleOnly: true,
-      applicationServerKey: this._urlB64ToUint8Array(
-        CONFIG.PUSH_MSG_VAPID_PUBLIC_KEY,
-      ),
+      applicationServerKey: this._urlB64ToUint8Array(CONFIG.PUSH_MSG_VAPID_PUBLIC_KEY),
     };
   },
 
@@ -172,16 +154,12 @@ const FooterToolsInitiator = {
       const status = await Notification.requestPermission();
 
       if (status === 'denied') {
-        window.alert(
-          'Cannot subscribe to push message because the status of notification permission is denied',
-        );
+        window.alert('Cannot subscribe to push message because the status of notification permission is denied');
         return false;
       }
 
       if (status === 'default') {
-        window.alert(
-          'Cannot subscribe to push message because the status of notification permission is ignored',
-        );
+        window.alert('Cannot subscribe to push message because the status of notification permission is ignored');
         return false;
       }
     }

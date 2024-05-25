@@ -1,18 +1,4 @@
 @media screen and (min-width: 650px) {
-  .movie .movie__title {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-
-  .movie .movie__overview {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-
-  footer #footerTools {
-    flex-direction: row;
-  }
-
   .app-bar {
     grid-template-columns: 1fr auto;
     padding: 8px 32px;
@@ -44,6 +30,7 @@
 
   .movies {
     grid-template-columns: 1fr 1fr;
+
   }
 
   .movie {
@@ -58,6 +45,10 @@
   .movie .movie__overview {
     grid-column-start: 1;
     grid-column-end: 3;
+  }
+
+  footer #footerTools {
+    flex-direction: row;
   }
 }
 
